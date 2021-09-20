@@ -2,8 +2,8 @@
   <div class="hello">
     <h1>{{ msg }}</h1>
     <div class="main">
-      <input type="number" v-model="operand1" />
-      <input type="number" v-model="operand2" />
+      <input type="number" v-model.number="operand1" />
+      <input type="number" v-model.number="operand2" />
       ={{ result }}
     </div>
     <br />
