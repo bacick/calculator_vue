@@ -58,16 +58,16 @@ export default {
   methods: {
     clear () {
       if (this.activ) {
-        this.operand1 = this.operand1.substring(0, this.operand1.length - 1)
+        this.operand1 = (this.operand1 - (this.operand1 % 10)) / 10
       } else {
-        this.operand2 = this.operand2.substring(0, this.operand2.length - 1)
+        this.operand2 = Number(this.operand2.toString().slice(0, -1))
       }
     },
     input (key) {
       if (this.activ) {
-        this.operand1 += key
+        this.operand1 = Number(this.operand1 += key)
       } else {
-        this.operand2 += key
+        this.operand2 = Number(this.operand2 += key)
       }
     },
     calculate (operator = '+') {
