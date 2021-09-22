@@ -2,8 +2,8 @@
   <div class="hello">
     <h1>{{ msg }}</h1>
     <div class="main">
-      <input type="number" v-model.number="operand1" :disabled='activ' />
-      <input type="number" v-model.number="operand2" />
+      <input type="number" v-model.number="operand1" :disabled='show ? !activ : disabled= false'/>
+      <input type="number" v-model.number="operand2" :disabled='show ? activ : disabled= false'/>
       ={{ result }}
     </div>
     <div class="error" v-if='error'>
@@ -22,17 +22,17 @@
       <input type="checkbox" id='keyboard' v-model='show' />
       <label for="keyboard">Отобразить экранную клавиатуру</label>
     </div>
-    <div class="keyboard" v-show='show'>
+    <div class="keyboard" v-if='show'>
       <button v-for='key in keys'
-      :key='key'>{{ key }}</button>
+      :key='key'
+      @click='input(key)'>{{ key }}</button>
+      <button @click='clear()'>Del</button>
     </div>
-    <div class="checkInput">
-      <input type="radio" id='operand#1' :value='false' name='input' v-mode.="act"/>
+    <div class="checkInput" v-if='show'>
+      <input type="radio" id='operand#1' :value='true' name='input' v-model="activ"/>
       <label for="operand#1">Операнд 1</label>
-      {{act}}
-      <input type="radio" id='operand#2' :value='true' name='input' v-mode="act"/>
+      <input type="radio" id='operand#2' :value='false' name='input' v-model="activ"/>
       <label for="operand#2">Операнд 2</label>
-      {{act}}
     </div>
   </div>
 </template>
@@ -50,13 +50,26 @@ export default {
       result: 0,
       error: '',
       operators: ['+', '-', '*', '/', '**', '%'],
-      keys: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'Del'],
+      keys: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
       show: false,
-      activ: true,
-      act: ''
+      activ: true
     }
   },
   methods: {
+    clear () {
+      if (this.activ) {
+        this.operand1 = this.operand1.substring(0, this.operand1.length - 1)
+      } else {
+        this.operand2 = this.operand2.substring(0, this.operand2.length - 1)
+      }
+    },
+    input (key) {
+      if (this.activ) {
+        this.operand1 += key
+      } else {
+        this.operand2 += key
+      }
+    },
     calculate (operator = '+') {
       this.error = ''
       switch (operator) {
